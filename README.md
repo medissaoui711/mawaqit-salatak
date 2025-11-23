@@ -1,11 +1,15 @@
-<div align="center">
+# مواقيت صلاتك (Mawaqit Salatak)
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+تطبيق ويب تقدمي (PWA) عصري لمواقيت الصلاة، يجمع بين الدقة والتصميم الجمالي (Neon Design) مع ميزات ذكية.
 
-  <h1>Built with AI Studio</h2>
+## المميزات الرئيسية
+- **مواقيت دقيقة:** حساب أوقات الصلاة بناءً على الموقع الجغرافي.
+- **مساعد ذكي (AI):** إجابة على الاستفسارات الدينية باستخدام Google Gemini.
+- **القبلة بالواقع المعزز (AR):** تحديد اتجاه القبلة باستخدام الكاميرا.
+- **أذكار وتحديات:** تتبع الأذكار اليومية وتحديات دينية لتحفيز المستخدم.
+- **الوضع الليلي:** تصميم نيون مريح للعين وموفر للطاقة.
+- **يعمل بدون إنترنت:** دعم كامل لوضع عدم الاتصال (Offline Mode).
 
-  <p>The fastest path from prompt to production with Gemini.</p>
-
-  <a href="https://aistudio.google.com/apps">Start building</a>
-
-</div>
+## التشغيل
+1. التثبيت: `npm install`
+2. التشغيل: `npm run dev`

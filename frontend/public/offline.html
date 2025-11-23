@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لا يوجد اتصال | Offline</title>
+    <style>
+        body {
+            background-color: #0d0d0d;
+            color: #fff;
+            font-family: system-ui, -apple-system, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        .icon {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 20px;
+            color: #53ff4c;
+        }
+        h1 { margin-bottom: 10px; }
+        p { color: #888; }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #53ff4c;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+    </svg>
+    <h1>لا يوجد اتصال بالإنترنت</h1>
+    <p>You are offline</p>
+    <p>يرجى التحقق من اتصالك وإعادة المحاولة</p>
+    <button onclick="window.location.reload()">تحديث | Reload</button>
+</body>
+</html>
