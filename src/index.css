@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --neon-color: #53ff4c;
+  --neon-rgb: 83, 255, 76;
+}
+
+body {
+  background-color: #0d0d0d;
+  color: white;
+  overscroll-behavior-y: none;
+}
+
+.leaflet-container {
+  background: #141414 !important;
+  border-radius: 0.75rem;
+}
+
+.font-quran {
+  font-family: 'Amiri', serif;
+  line-height: 2.2;
+}
+
+.number-font {
+  font-family: 'Cairo', sans-serif;
+}
