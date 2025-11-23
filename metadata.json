@@ -1,5 +1,5 @@
 {
-  "name": "Mawaqit Salatak",
+  "name": "مواقيت صلاتك",
   "description": "A modern, dark-mode prayer times application with neon aesthetics, compass, and real-time countdowns.",
   "requestFramePermissions": [
     "geolocation",
