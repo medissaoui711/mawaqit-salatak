@@ -10,6 +10,10 @@ const __dirname = path.dirname(__filename)
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  define: {
+    'process.env.API_KEY': JSON.stringify(process.env.API_KEY),
+    'process.env': {}
+  },
   plugins: [
     react(),
     VitePWA({
@@ -19,7 +23,7 @@ export default defineConfig({
       registerType: 'prompt',
       injectRegister: 'auto',
       pwaAssets: {
-        disabled: true, // Disable automatic generation to avoid errors with missing source images
+        disabled: true,
         config: false,
       },
       manifest: {
