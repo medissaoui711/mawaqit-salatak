@@ -156,7 +156,6 @@ export interface Surah {
   englishNameTranslation: string;
   numberOfAyahs: number;
   revelationType: string;
-  // some apis return ayahs directly in list or details, handle loosely
 }
 
 export interface Ayah {

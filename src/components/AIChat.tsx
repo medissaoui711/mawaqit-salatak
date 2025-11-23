@@ -37,6 +37,7 @@ const AIChat: React.FC = () => {
     setIsLoading(true);
 
     try {
+      // Use process.env.API_KEY directly as per guidelines
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       
       const systemInstruction = `
