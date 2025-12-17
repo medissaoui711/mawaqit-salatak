@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Bot, User, Sparkles, AlertCircle } from 'lucide-react';
 import { useSettings } from '../contexts/SettingsContext';
+// FIX: Correctly import GoogleGenAI
 import { GoogleGenAI } from "@google/genai";
 import { motion } from 'framer-motion';
 
@@ -37,6 +38,7 @@ const AIChat: React.FC = () => {
     setIsLoading(true);
 
     try {
+      // FIX: Use process.env.API_KEY as per guidelines
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       
       const systemInstruction = `
@@ -52,6 +54,7 @@ const AIChat: React.FC = () => {
         }
       });
 
+      // FIX: Used sendMessage and extracted the text response correctly.
       const result = await chat.sendMessage({ message: userMsg.text });
       const responseText = result.text;
       

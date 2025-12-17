@@ -10,19 +10,29 @@
 body {
   background-color: #0d0d0d;
   color: white;
-  overscroll-behavior-y: none;
+  overscroll-behavior-y: none; /* Prevent pull-to-refresh on mobile */
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0d0d0d;
+}
+::-webkit-scrollbar-thumb {
+  background: #333; 
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--neon-color); 
 }
 
 .leaflet-container {
   background: #141414 !important;
   border-radius: 0.75rem;
-}
-
-.font-quran {
-  font-family: 'Amiri', serif;
-  line-height: 2.2;
-}
-
-.number-font {
-  font-family: 'Cairo', sans-serif;
 }

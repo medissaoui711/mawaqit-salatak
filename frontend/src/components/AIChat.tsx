@@ -37,6 +37,7 @@ const AIChat: React.FC = () => {
     setIsLoading(true);
 
     try {
+      // FIX: Use process.env.API_KEY directly as per guidelines
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       
       const systemInstruction = `
@@ -52,10 +53,15 @@ const AIChat: React.FC = () => {
         }
       });
 
+      // FIX: Used sendMessage and extracted text correctly from the response.
       const result = await chat.sendMessage({ message: userMsg.text });
       const responseText = result.text;
       
-      setMessages(prev => [...prev, { id: Date.now()+1, role: 'model', text: responseText }]);
+      if (responseText) {
+        setMessages(prev => [...prev, { id: Date.now()+1, role: 'model', text: responseText }]);
+      } else {
+         throw new Error("No response text");
+      }
 
     } catch (error) {
       console.error("AI Error:", error);

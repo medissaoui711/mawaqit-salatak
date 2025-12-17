@@ -193,3 +193,11 @@ export interface FamilyMember {
   relation?: string;
   lastDua?: string;
 }
+
+export interface Mosque {
+  id: number;
+  lat: number;
+  lon: number;
+  name?: string;
+  distance?: number;
+}

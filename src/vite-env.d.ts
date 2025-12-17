@@ -1,9 +1,9 @@
+// FIX: Add reference types for Vite and PWA client to resolve TypeScript errors.
 /// <reference types="vite/client" />
 /// <reference types="vite-plugin-pwa/client" />
 
 interface ImportMetaEnv {
   readonly VITE_API_URL: string;
-  readonly [key: string]: any;
 }
 
 interface ImportMeta {

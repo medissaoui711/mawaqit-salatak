@@ -1,5 +1,5 @@
 
-import { ApiResponse, Coordinates, AppSettings, PrayerData, Surah, SurahDetails } from '../types';
+import { ApiResponse, Coordinates, AppSettings, PrayerData, Surah, SurahDetails, Mosque } from '../types';
 
 const ALADHAN_URL = 'https://api.aladhan.com/v1';
 const QURAN_URL = 'https://api.alquran.cloud/v1';
@@ -166,14 +166,6 @@ export const fetchTafseer = async (surahNumber: number, ayahNumber: number): Pro
     return null;
   }
 };
-
-export interface Mosque {
-  id: number;
-  lat: number;
-  lon: number;
-  name?: string;
-  distance?: number;
-}
 
 export const fetchNearbyMosques = async (coords: Coordinates): Promise<Mosque[]> => {
   const query = `

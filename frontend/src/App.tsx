@@ -1,4 +1,4 @@
-
+// FIX: The triple-slash reference types were moved to `vite-env.d.ts` to resolve TypeScript errors.
 import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { Settings, RefreshCw, Home, Calendar as CalendarIcon, BookOpen, Navigation as NavIcon, Trophy, VolumeX, Map as MapIcon, Loader2, WifiOff, Download, X } from 'lucide-react';
 import { fetchPrayerTimes, getCityName, getCachedMonth } from './services/api';

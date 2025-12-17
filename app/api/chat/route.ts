@@ -51,9 +51,10 @@ export async function POST(req: NextRequest) {
     const stream = new ReadableStream({
       async start(controller) {
         try {
+          // FIX: Correctly structure the `contents` and `systemInstruction` for generateContentStream.
           const response = await ai.models.generateContentStream({
             model: 'gemini-2.5-flash',
-            contents: lastMessage,
+            contents: [{ parts: [{ text: lastMessage }] }],
             config: {
               systemInstruction: "أنت مساعد إسلامي ذكي ومؤدب. أجب باختصار ودقة. استخدم اللغة العربية.",
             }

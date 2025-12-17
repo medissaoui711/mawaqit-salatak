@@ -1,7 +1,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Coordinates } from '../types';
-import { fetchNearbyMosques, Mosque } from '../services/api';
+import { Coordinates, Mosque } from '../types';
+import { fetchNearbyMosques } from '../services/api';
 import { useSettings } from '../contexts/SettingsContext';
 import { MapPin, Navigation } from 'lucide-react';
 

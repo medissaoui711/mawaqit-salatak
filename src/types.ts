@@ -1,4 +1,3 @@
-
 export interface Timings {
   Fajr: string;
   Sunrise: string;
@@ -191,4 +190,12 @@ export interface FamilyMember {
   name: string;
   relation?: string;
   lastDua?: string;
+}
+
+export interface Mosque {
+  id: number;
+  lat: number;
+  lon: number;
+  name?: string;
+  distance?: number;
 }

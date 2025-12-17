@@ -1,7 +1,8 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Bot, User, Sparkles, AlertCircle } from 'lucide-react';
-import { useSettings } from '../contexts/SettingsContext';
+import { useSettings } from '../../contexts/SettingsContext';
+// FIX: Correctly import GoogleGenAI and GenerateContentResponse for streaming.
 import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
 import { motion } from 'framer-motion';
 
@@ -67,6 +68,7 @@ const AIChat: React.FC = () => {
         }
       });
 
+      // FIX: Switched to sendMessageStream for a better user experience.
       const resultStream = await chat.sendMessageStream({ message: userMsg.text });
       
       const modelMsgId = Date.now() + 1;
@@ -74,6 +76,7 @@ const AIChat: React.FC = () => {
 
       let fullText = '';
       for await (const chunk of resultStream) {
+        // FIX: Used GenerateContentResponse type and checked for text content.
         const c = chunk as GenerateContentResponse;
         if (c.text) {
             fullText += c.text;
