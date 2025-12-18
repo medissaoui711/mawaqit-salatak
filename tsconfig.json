@@ -24,7 +24,7 @@
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
     
-    "types": ["vite/client", "vite-plugin-pwa/client"]
+    "types": ["vite/client", "vite-plugin-pwa/client", "node"]
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

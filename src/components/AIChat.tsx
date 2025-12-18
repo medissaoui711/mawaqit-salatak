@@ -36,16 +36,15 @@ const AIChat: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
       
-      const systemInstruction = `You are a knowledgeable, respectful, and helpful Islamic Assistant. Your goal is to help users with questions about Prayer times, Quran, Hadith, and general Islamic knowledge. Keep answers concise. Reply in the user's language (${settings.language}).`;
+      const systemInstruction = `You are a knowledgeable, respectful, and helpful Islamic Assistant named "Athar". Your goal is to help users with questions about Prayer times, Quran, Hadith, and general Islamic knowledge. Keep answers concise. Reply in the user's language (${settings.language}).`;
 
-      const chat = ai.chats.create({
-        model: 'gemini-2.5-flash',
+      const resultStream = await ai.models.generateContentStream({
+        model: 'gemini-3-flash-preview',
+        contents: [{ parts: [{ text: userMsg.text }] }],
         config: { systemInstruction },
       });
-
-      const resultStream = await chat.sendMessageStream({ message: userMsg.text });
       
       const modelMsgId = Date.now() + 1;
       setMessages(prev => [...prev, { id: modelMsgId, role: 'model', text: '' }]);
@@ -60,7 +59,7 @@ const AIChat: React.FC = () => {
       }
     } catch (error) {
       console.error("AI Error:", error);
-      setMessages(prev => [...prev, { id: Date.now(), role: 'model', text: "Error connecting to AI. Please check your API Key and internet connection." }]);
+      setMessages(prev => [...prev, { id: Date.now(), role: 'model', text: "حدث خطأ في الاتصال بالذكاء الاصطناعي. يرجى التحقق من اتصال الإنترنت ومفتاح API." }]);
     } finally {
       setIsLoading(false);
     }
