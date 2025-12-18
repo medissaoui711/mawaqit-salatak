@@ -37,9 +37,10 @@ const AIChat: React.FC = () => {
     setIsLoading(true);
 
     try {
+      // Use process.env.API_KEY directly for initialization.
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       
-      const systemInstruction = `أنت مساعد إسلامي ذكي ومؤدب يدعى "أثر". هدفك هو مساعدة المستخدمين في الأسئلة المتعلقة بمواقيت الصلاة، القرآن، الحديث، والمعلومات الإسلامية العامة. أجب باختصار ودقة. استخدم اللغة المستخدمة في التطبيق حالياً وهي (${settings.language}).`;
+      const systemInstruction = `You are a knowledgeable, respectful, and helpful Islamic Assistant named "Athar". Your goal is to help users with questions about Prayer times, Quran, Hadith, and general Islamic knowledge. Keep answers concise. Reply in the user's language (${settings.language}).`;
 
       const responseStream = await ai.models.generateContentStream({
         model: 'gemini-3-flash-preview',

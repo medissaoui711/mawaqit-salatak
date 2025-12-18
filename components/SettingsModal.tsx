@@ -16,8 +16,6 @@ type Tab = 'general' | 'calculation' | 'location' | 'audio';
 const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, currentCoords, onUpdateLocation }) => {
   const { settings, updateSettings, t } = useSettings();
   const [activeTab, setActiveTab] = useState<Tab>('general');
-  
-  // Local state for unsaved changes
   const [localSettings, setLocalSettings] = useState<AppSettings>(settings);
   const [tempLocation, setTempLocation] = useState<{lat: number, lng: number, city: string} | null>(null);
 
@@ -32,19 +30,12 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, currentC
   };
 
   const updateLocal = (key: keyof AppSettings, value: any) => {
-    setLocalSettings((prev: AppSettings) => ({ ...prev, [key]: value }));
-  };
-
-  const updateOffset = (prayer: PrayerName, value: number) => {
-    setLocalSettings((prev: AppSettings) => ({
-      ...prev,
-      offsets: { ...prev.offsets, [prayer]: value }
-    }));
+    setLocalSettings((prev) => ({ ...prev, [key]: value }));
   };
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-white dark:bg-card border border-zinc-200 dark:border-zinc-800 w-full max-w-lg rounded-2xl shadow-2xl flex flex-col max-h-[85vh]">
+      <div className="bg-white dark:bg-card border border-zinc-200 dark:border-zinc-800 w-full max-w-lg rounded-2xl shadow-2xl flex flex-col max-h-[85vh] overflow-hidden">
         
         <div className="flex items-center justify-between p-5 border-b border-zinc-200 dark:border-zinc-800">
           <h2 className="text-xl font-bold text-zinc-900 dark:text-white">{t('common.settings')}</h2>
@@ -100,11 +91,11 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, currentC
               <div className="space-y-2">
                 <label className="text-sm font-bold text-zinc-500 dark:text-zinc-400">{t('common.themeMode')}</label>
                 <div className="grid grid-cols-3 gap-3">
-                  {[
+                  {([
                     { mode: 'light', icon: Sun, label: 'فاتح' },
                     { mode: 'dark', icon: Moon, label: 'داكن' },
                     { mode: 'system', icon: Laptop, label: 'تلقائي' }
-                  ].map(({ mode, icon: Icon, label }) => (
+                  ] as const).map(({ mode, icon: Icon, label }) => (
                     <button
                       key={mode}
                       onClick={() => updateLocal('theme', mode)}
@@ -141,25 +132,17 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, currentC
                </div>
 
                {localSettings.locationMode === 'manual' && (
-                 <LocationPicker 
-                    initialCoords={currentCoords} 
-                    onLocationSelect={(coords: Coordinates, city: string) => {
-                      setTempLocation({ lat: coords.latitude, lng: coords.longitude, city });
-                    }}
-                 />
+                 <LocationPicker initialCoords={currentCoords} onLocationSelect={(coords: Coordinates, city: string) => {
+                    setTempLocation({ lat: coords.latitude, lng: coords.longitude, city });
+                 }} />
                )}
             </div>
           )}
         </div>
 
         <div className="p-5 border-t border-zinc-200 dark:border-zinc-800 flex gap-3">
-           <button onClick={onClose} className="flex-1 py-3 rounded-xl border border-zinc-300 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
-             {t('common.cancel')}
-           </button>
-           <button onClick={handleSave} className="flex-1 py-3 rounded-xl bg-neon text-black font-bold hover:bg-[#42e03c] transition-colors flex items-center justify-center gap-2">
-             <Save className="w-5 h-5" />
-             {t('common.save')}
-           </button>
+           <button onClick={onClose} className="flex-1 py-3 rounded-xl border border-zinc-300 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">{t('common.cancel')}</button>
+           <button onClick={handleSave} className="flex-1 py-3 rounded-xl bg-neon text-black font-bold hover:bg-[#42e03c] transition-colors flex items-center justify-center gap-2"><Save className="w-5 h-5" />{t('common.save')}</button>
         </div>
       </div>
     </div>

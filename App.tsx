@@ -14,9 +14,9 @@ import { Logo } from './components/Logo';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePWA } from './hooks/usePWA';
 
+// --- Lazy Load Components ---
 const ChallengesModal = React.lazy(() => import('./components/ChallengesModal'));
 const AthkarWidget = React.lazy(() => import('./components/AthkarWidget'));
-const HijriCalendar = React.lazy(() => import('./components/HijriCalendar'));
 const QuranView = React.lazy(() => import('./components/QuranView'));
 const MosquesMap = React.lazy(() => import('./components/MosquesMap'));
 const ARQibla = React.lazy(() => import('./components/ARQibla'));
@@ -61,11 +61,11 @@ const MawaqitApp: React.FC = () => {
     };
   }, []);
 
-  // تحديث ألوان النيون والوضع المظلم
+  // Theme & Neon Logic
   useEffect(() => {
     const root = document.documentElement;
     
-    // إدارة كلاس الـ Dark Mode
+    // Handle UI Theme
     if (settings.theme === 'dark') {
       root.classList.add('dark');
     } else if (settings.theme === 'light') {
@@ -75,7 +75,7 @@ const MawaqitApp: React.FC = () => {
       root.classList.toggle('dark', prefersDark);
     }
 
-    // إدارة ألوان النيون بناءً على وقت الصلاة
+    // Dynamic Neon Color
     let color = settings.neonColor || '#53ff4c'; 
     if (settings.themeMode !== 'manual') {
        if (nextPrayer === 'Sunrise') color = '#ff9d00'; 
