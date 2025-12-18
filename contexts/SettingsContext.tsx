@@ -1,6 +1,5 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { AppSettings, DEFAULT_SETTINGS, Language } from '../types';
+import { AppSettings, DEFAULT_SETTINGS, Language, ThemeMode } from '../types';
 import { resources } from '../utils/i18n';
 
 interface SettingsContextType {
@@ -16,7 +15,7 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [settings, setSettings] = useState<AppSettings>(() => {
     try {
       const saved = localStorage.getItem('mawaqit_settings');
-      return saved ? JSON.parse(saved) : DEFAULT_SETTINGS;
+      return saved ? { ...DEFAULT_SETTINGS, ...JSON.parse(saved) } : DEFAULT_SETTINGS;
     } catch (e) {
       console.warn("Failed to parse settings, resetting to default", e);
       return DEFAULT_SETTINGS;
@@ -26,12 +25,39 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   useEffect(() => {
     try {
       localStorage.setItem('mawaqit_settings', JSON.stringify(settings));
-      document.documentElement.lang = settings.language;
-      document.documentElement.dir = settings.language === 'ar' ? 'rtl' : 'ltr';
+      
+      const root = document.documentElement;
+      
+      // Handle Language and RTL
+      root.lang = settings.language;
+      root.dir = settings.language === 'ar' ? 'rtl' : 'ltr';
+
+      // Handle Theme
+      applyTheme(settings.theme);
+
     } catch (e) {
       console.error("Failed to save settings", e);
     }
   }, [settings]);
+
+  const applyTheme = (mode: ThemeMode) => {
+    const root = document.documentElement;
+    if (mode === 'system') {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      root.classList.toggle('dark', prefersDark);
+    } else {
+      root.classList.toggle('dark', mode === 'dark');
+    }
+  };
+
+  // Listen for system theme changes if mode is system
+  useEffect(() => {
+    if (settings.theme !== 'system') return;
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = () => applyTheme('system');
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, [settings.theme]);
 
   const updateSettings = (newSettings: Partial<AppSettings>) => {
     setSettings(prev => ({ ...prev, ...newSettings }));

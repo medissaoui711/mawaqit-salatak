@@ -1,4 +1,3 @@
-
 export interface Timings {
   Fajr: string;
   Sunrise: string;
@@ -94,9 +93,11 @@ export const ARABIC_PRAYER_NAMES: Record<PrayerName, string> = {
 // --- Settings Types ---
 
 export type Language = 'ar' | 'en' | 'fr';
+export type ThemeMode = 'dark' | 'light' | 'system';
 
 export interface AppSettings {
   language: Language;
+  theme: ThemeMode;
   calculationMethod: number;
   madhab: 0 | 1; // 0: Shafi (Standard), 1: Hanafi
   offsets: Record<PrayerName, number>;
@@ -112,6 +113,7 @@ export interface AppSettings {
 
 export const DEFAULT_SETTINGS: AppSettings = {
   language: 'ar',
+  theme: 'dark',
   calculationMethod: 4, // Umm Al-Qura
   madhab: 0,
   offsets: {
@@ -156,7 +158,6 @@ export interface Surah {
   englishNameTranslation: string;
   numberOfAyahs: number;
   revelationType: string;
-  // some apis return ayahs directly in list or details, handle loosely
 }
 
 export interface Ayah {

@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --neon-color: #53ff4c;
+  --neon-rgb: 83, 255, 76;
+}
+
+body {
+  @apply bg-zinc-50 text-zinc-900 transition-colors duration-300;
+  overscroll-behavior-y: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.dark body {
+  @apply bg-[#0d0d0d] text-white;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-zinc-50 dark:bg-[#0d0d0d];
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-zinc-300 dark:bg-zinc-800 rounded-full;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--neon-color); 
+}
+
+.leaflet-container {
+  @apply bg-zinc-100 dark:bg-[#141414] rounded-xl border-zinc-200 dark:border-zinc-800;
+}
+
+.neon-glow {
+  box-shadow: 0 0 10px rgba(var(--neon-rgb), 0.3), 0 0 20px rgba(var(--neon-rgb), 0.1);
+}
+
+.dark .neon-glow {
+  box-shadow: 0 0 15px rgba(var(--neon-rgb), 0.4), 0 0 30px rgba(var(--neon-rgb), 0.1);
+}

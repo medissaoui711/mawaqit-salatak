@@ -1,13 +1,15 @@
+
 import React, { useState, useEffect } from 'react';
 import { useSettings } from '../contexts/SettingsContext';
 import { BookText, Droplets, Info, Edit3 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+// Component for Women's specific Quranic and purity tracking needs
 const QuranForWomen: React.FC = () => {
   const { t } = useSettings();
   const [activeTab, setActiveTab] = useState<'mushaf' | 'tracker'>('mushaf');
   
-  // State for Purity Tracker
+  // State for Purity Tracker using localStorage for persistence
   const [cycleInfo, setCycleInfo] = useState(() => {
     const saved = localStorage.getItem('mawaqit_purity_tracker');
     if (saved) return JSON.parse(saved);
@@ -27,13 +29,18 @@ const QuranForWomen: React.FC = () => {
     setCycleInfo({ ...cycleInfo, [e.target.name]: e.target.value });
   };
 
-  // Calculate current status
+  // Calculate current purity status based on cycle information
   const getPurityStatus = () => {
     const start = new Date(cycleInfo.startDate);
     const now = new Date();
+    // Normalize to start of day for accurate day counting
+    start.setHours(0, 0, 0, 0);
+    now.setHours(0, 0, 0, 0);
+    
     const diffTime = now.getTime() - start.getTime();
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
     
+    // Check if within the menstrual period duration
     if (diffDays >= 0 && diffDays < cycleInfo.duration) {
       return { inCycle: true, day: diffDays + 1 };
     }
@@ -53,7 +60,7 @@ const QuranForWomen: React.FC = () => {
         <h2 className="text-2xl font-bold text-neon">{t('common.quranWomen')}</h2>
       </div>
 
-      {/* Tabs */}
+      {/* Mode Selection Tabs */}
       <div className="flex p-1 gap-1 bg-zinc-900 rounded-xl mb-6">
         <button
           onClick={() => setActiveTab('mushaf')}
@@ -77,7 +84,7 @@ const QuranForWomen: React.FC = () => {
             className="text-center p-10 bg-card rounded-2xl border border-zinc-800"
           >
             <BookText className="w-16 h-16 text-zinc-700 mx-auto mb-4" />
-            <h3 className="font-bold text-white">مصحف التجويد</h3>
+            <h3 className="font-bold text-white">{t('common.mushaf')}</h3>
             <p className="text-sm text-zinc-500 mt-2">
               قريباً... واجهة تفاعلية لقراءة القرآن مع أحكام التجويد الملونة والفهرس الموضوعي.
             </p>
@@ -112,9 +119,50 @@ const QuranForWomen: React.FC = () => {
                           <span className="text-zinc-500 text-sm">{t('common.days')}</span>
                        </div>
                     </div>
+                    <button onClick={() => setIsEditing(false)} className="w-full mt-2 bg-neon text-black py-2 rounded-lg font-bold text-xs">
+                      {t('common.save')}
+                    </button>
                  </div>
               ) : (
                 <div className="text-center space-y-4">
                     <p className="text-zinc-400 text-sm">{t('common.status')}</p>
                     {status.inCycle ? (
-                        <div className="p-4 rounded-xl bg
+                        <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20">
+                            <h4 className="font-bold text-red-500 mb-1">{t('common.menstrualPeriod')}</h4>
+                            <p className="text-xs text-zinc-400">اليوم {status.day} من الدورة</p>
+                        </div>
+                    ) : (
+                        <div className="p-4 rounded-xl bg-green-500/10 border border-green-500/20">
+                            <h4 className="font-bold text-green-500 mb-1">{t('common.purityPeriod')}</h4>
+                            <p className="text-xs text-zinc-400">أنتِ على طهارة الآن</p>
+                        </div>
+                    )}
+
+                    <div className="grid grid-cols-2 gap-4 mt-6">
+                        <div className="p-4 bg-zinc-900 rounded-xl border border-zinc-800">
+                           <span className="text-xs text-zinc-500 block mb-1">{t('common.cycleDuration')}</span>
+                           <span className="font-bold text-white">{cycleInfo.duration} {t('common.days')}</span>
+                        </div>
+                        <div className="p-4 bg-zinc-900 rounded-xl border border-zinc-800">
+                           <span className="text-xs text-zinc-500 block mb-1">{t('common.cycleStartDate')}</span>
+                           <span className="font-bold text-white">{cycleInfo.startDate}</span>
+                        </div>
+                    </div>
+                </div>
+              )}
+
+              <div className="mt-6 flex items-start gap-2 p-4 bg-zinc-900/50 rounded-xl border border-zinc-800">
+                 <Info className="w-4 h-4 text-zinc-500 shrink-0 mt-0.5" />
+                 <p className="text-[10px] text-zinc-500 leading-relaxed">
+                   {t('common.trackerDisclaimer')}
+                 </p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+};
+
+export default QuranForWomen;

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { PrayerName } from '../types';
 import { formatTimeShort } from '../utils/timeUtils';
@@ -25,8 +24,8 @@ const PrayerCard: React.FC<PrayerCardProps> = ({ name, time, isActive, isNext })
         relative overflow-hidden rounded-xl p-4 transition-all duration-300 group
         flex flex-col items-center justify-between min-h-[120px]
         ${isActive 
-          ? 'bg-zinc-800/80 border-neon/50 border shadow-neon scale-[1.02]' 
-          : 'bg-card border border-zinc-800 hover:border-zinc-600 hover:bg-zinc-900'}
+          ? 'bg-zinc-100 dark:bg-zinc-800/80 border-neon/50 border shadow-neon scale-[1.02]' 
+          : 'bg-white dark:bg-card border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-900'}
       `}
     >
       {/* Active Glow Background Effect */}
@@ -35,7 +34,7 @@ const PrayerCard: React.FC<PrayerCardProps> = ({ name, time, isActive, isNext })
       )}
 
       <div className="w-full flex justify-between items-center mb-2 relative z-10">
-        <span className={`text-sm font-bold ${isActive ? 'text-neon' : 'text-zinc-400'}`}>
+        <span className={`text-sm font-bold ${isActive ? 'text-neon' : 'text-zinc-500 dark:text-zinc-400'}`}>
           {translatedName}
         </span>
         {isActive && (
@@ -46,12 +45,12 @@ const PrayerCard: React.FC<PrayerCardProps> = ({ name, time, isActive, isNext })
         )}
       </div>
 
-      <div className={`text-2xl font-mono font-semibold tracking-wider relative z-10 ${isActive ? 'text-white' : 'text-zinc-300'}`}>
+      <div className={`text-2xl font-mono font-black tracking-wider relative z-10 ${isActive ? 'text-zinc-900 dark:text-white' : 'text-zinc-700 dark:text-zinc-300'}`}>
         {formattedTime}
       </div>
 
       {/* Decorative subtle line */}
-      <div className={`w-8 h-0.5 mt-3 rounded-full ${isActive ? 'bg-neon' : 'bg-zinc-700 group-hover:bg-zinc-600'}`} aria-hidden="true" />
+      <div className={`w-8 h-0.5 mt-3 rounded-full ${isActive ? 'bg-neon' : 'bg-zinc-200 dark:bg-zinc-700 group-hover:bg-zinc-300 dark:group-hover:bg-zinc-600'}`} aria-hidden="true" />
     </div>
   );
 };
