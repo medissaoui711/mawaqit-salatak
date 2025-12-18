@@ -1,7 +1,7 @@
 'use client';
 
 import React, { memo } from 'react';
-import { cn, sanitizeHtml, formatDate } from '@/lib/utils';
+import { cn, sanitizeHtml, formatDate } from '../../lib/utils';
 import { Bot, User } from 'lucide-react';
 import { motion } from 'framer-motion';
 

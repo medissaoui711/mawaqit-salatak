@@ -86,7 +86,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, currentC
               <div className="space-y-2">
                 <label className="text-sm font-bold text-zinc-500 dark:text-zinc-400">{t('common.language')}</label>
                 <div className="grid grid-cols-3 gap-3">
-                  {['ar', 'en', 'fr'].map((lang) => (
+                  {(['ar', 'en', 'fr'] as const).map((lang) => (
                     <button
                       key={lang}
                       onClick={() => updateLocal('language', lang)}
@@ -103,18 +103,20 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, currentC
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-bold text-zinc-500 dark:text-zinc-400">{t('common.themeMode') || 'المظهر'}</label>
+                <label className="text-sm font-bold text-zinc-500 dark:text-zinc-400">{t('common.themeMode')}</label>
                 <div className="grid grid-cols-3 gap-3">
-                  {[
+                  {( [
                     { mode: 'light', icon: Sun, label: 'فاتح' },
                     { mode: 'dark', icon: Moon, label: 'داكن' },
                     { mode: 'system', icon: Laptop, label: 'تلقائي' }
-                  ].map(({ mode, icon: Icon, label }) => (
+                  ] as const).map(({ mode, icon: Icon, label }) => (
                     <button
                       key={mode}
-                      onClick={() => updateLocal('themeMode', mode)}
+                      // Fix: Always use the 'theme' property for UI themes 'light' | 'dark' | 'system' instead of 'themeMode'.
+                      onClick={() => updateLocal('theme', mode)}
                       className={`flex flex-col items-center gap-1 py-3 rounded-xl border transition-all ${
-                        localSettings.themeMode === mode
+                        // Fix: The comparison must be against 'theme' to avoid type overlap errors and correctly reflect selection.
+                        localSettings.theme === mode
                           ? 'border-neon bg-neon/10 text-neon'
                           : 'border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 text-zinc-500 dark:text-zinc-400 hover:border-zinc-400 dark:hover:border-zinc-600'
                       }`}
@@ -134,7 +136,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, currentC
               <div className="space-y-2">
                 <label className="text-sm text-zinc-500 dark:text-zinc-400">{t('common.adhanSound')}</label>
                 <div className="space-y-2">
-                  {['makkah', 'madina', 'alaqsa', 'beep', 'none'].map((sound) => (
+                  {(['makkah', 'madina', 'alaqsa', 'beep', 'none'] as const).map((sound) => (
                     <button
                       key={sound}
                       onClick={() => updateLocal('adhanSound', sound)}
@@ -156,7 +158,6 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, currentC
           {/* Calculation Tab */}
           {activeTab === 'calculation' && (
             <div className="space-y-6">
-              {/* Method */}
               <div className="space-y-2">
                 <label className="text-sm text-zinc-500 dark:text-zinc-400">{t('common.method')}</label>
                 <select 
@@ -164,15 +165,14 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, currentC
                   onChange={(e) => updateLocal('calculationMethod', Number(e.target.value))}
                   className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl p-3 text-zinc-900 dark:text-white focus:outline-none focus:border-neon"
                 >
-                  {CALCULATION_METHODS.map((method: { id: number; name: any }) => (
+                  {CALCULATION_METHODS.map((method: any) => (
                     <option key={method.id} value={method.id}>
-                      {method.name[localSettings.language]}
+                      {method.name[localSettings.language as keyof typeof method.name]}
                     </option>
                   ))}
                 </select>
               </div>
 
-              {/* Madhab */}
               <div className="space-y-2">
                 <label className="text-sm text-zinc-500 dark:text-zinc-400">{t('common.madhab')}</label>
                 <div className="grid grid-cols-2 gap-3">
@@ -199,7 +199,6 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, currentC
                 </div>
               </div>
 
-              {/* Offsets */}
               <div className="space-y-3 pt-4 border-t border-zinc-200 dark:border-zinc-800">
                 <h3 className="font-bold text-zinc-900 dark:text-white">{t('common.adjustments')}</h3>
                 <div className="grid grid-cols-2 gap-4">

@@ -81,23 +81,14 @@ export interface Coordinates {
 
 export type PrayerName = 'Fajr' | 'Sunrise' | 'Dhuhr' | 'Asr' | 'Maghrib' | 'Isha';
 
-export const ARABIC_PRAYER_NAMES: Record<PrayerName, string> = {
-  Fajr: 'الفجر',
-  Sunrise: 'الشروق',
-  Dhuhr: 'الظهر',
-  Asr: 'العصر',
-  Maghrib: 'المغرب',
-  Isha: 'العشاء',
-};
-
-// --- Settings Types ---
-
 export type Language = 'ar' | 'en' | 'fr';
+export type ThemeMode = 'dark' | 'light' | 'system';
 
 export interface AppSettings {
   language: Language;
+  theme: ThemeMode;
   calculationMethod: number;
-  madhab: 0 | 1; // 0: Shafi (Standard), 1: Hanafi
+  madhab: 0 | 1;
   offsets: Record<PrayerName, number>;
   locationMode: 'auto' | 'manual';
   manualLocation?: Coordinates & { city: string };
@@ -106,12 +97,13 @@ export interface AppSettings {
   lastReadSurah?: number;
   themeMode?: 'auto' | 'manual';
   neonColor?: string;
-  masjidModeDuration?: number; // minutes
+  masjidModeDuration?: number;
 }
 
 export const DEFAULT_SETTINGS: AppSettings = {
   language: 'ar',
-  calculationMethod: 4, // Umm Al-Qura
+  theme: 'dark',
+  calculationMethod: 4,
   madhab: 0,
   offsets: {
     Fajr: 0,
@@ -138,7 +130,6 @@ export const CALCULATION_METHODS = [
   { id: 13, name: { ar: 'تركيا (Diyanet)', en: 'Turkey (Diyanet)', fr: 'Turquie' } },
 ];
 
-// --- Athkar Types ---
 export interface Thikr {
   id: number;
   text: string;
@@ -147,7 +138,6 @@ export interface Thikr {
   description?: string;
 }
 
-// --- Quran Types ---
 export interface Surah {
   number: number;
   name: string;
@@ -168,21 +158,20 @@ export interface SurahDetails extends Surah {
   ayahs: Ayah[];
 }
 
-// --- Gamification Types ---
 export interface Challenge {
   id: string;
-  titleKey: string; // Translation key
+  titleKey: string;
   descriptionKey: string;
-  target: number; // e.g., 40 days
+  target: number;
   unit: 'days' | 'times';
-  icon: string; // Lucide icon name or emoji
+  icon: string;
 }
 
 export interface UserProgress {
-  challenges: Record<string, number>; // challengeId -> current progress
-  badges: string[]; // array of challengeIds completed
+  challenges: Record<string, number>;
+  badges: string[];
   streak: number;
-  lastCheckIn: string; // ISO date
+  lastCheckIn: string;
 }
 
 export interface FamilyMember {

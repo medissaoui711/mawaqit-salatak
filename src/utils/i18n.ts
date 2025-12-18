@@ -109,6 +109,7 @@ type TranslationStructure = {
     masjidModeActive: string;
     silencePhone: string;
     stop: string;
+    themeMode: string;
     // Quran for Women
     mushaf: string;
     rulingsAndTracker: string;
@@ -244,6 +245,7 @@ export const resources: Record<Language, TranslationStructure> = {
       masjidModeActive: 'وضع المسجد نشط',
       silencePhone: 'يرجى التأكد من وضع الهاتف على الصامت',
       stop: 'إيقاف',
+      themeMode: 'المظهر',
       mushaf: 'المصحف',
       rulingsAndTracker: 'الأحكام والمتابعة',
       purityTracker: 'متتبع أحكام الطهارة',
@@ -376,6 +378,7 @@ export const resources: Record<Language, TranslationStructure> = {
       masjidModeActive: 'Masjid Mode Active',
       silencePhone: 'Please ensure your phone is silent',
       stop: 'Stop',
+      themeMode: 'Theme',
       mushaf: 'Mushaf',
       rulingsAndTracker: 'Rulings & Tracker',
       purityTracker: 'Purity Rulings Tracker',
@@ -480,7 +483,7 @@ export const resources: Record<Language, TranslationStructure> = {
       distance: 'Distance',
       aiAssistant: 'Assistant IA',
       askAi: 'Demander à l\'IA',
-      askAiPlaceholder: 'Question sur la prière, Coran...',
+      askAiPlaceholder: 'Question sur la prière, Corان...',
       aiDisclaimer: 'Assistant IA. Vérifiez les sources.',
       arMode: 'Mode AR',
       cameraPermission: 'Accès caméra requis',
@@ -508,6 +511,7 @@ export const resources: Record<Language, TranslationStructure> = {
       masjidModeActive: 'Mode Mosquée Actif',
       silencePhone: 'Veuillez mettre le téléphone en silencieux',
       stop: 'Arrêter',
+      themeMode: 'Thème',
       mushaf: 'Mushaf',
       rulingsAndTracker: 'Règles & Suivi',
       purityTracker: 'Suivi des Règles de Pureté',

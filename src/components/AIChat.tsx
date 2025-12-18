@@ -32,17 +32,20 @@ const AIChat: React.FC = () => {
 
     const userMsg: Message = { id: Date.now(), role: 'user', text: input };
     setMessages(prev => [...prev, userMsg]);
+    const currentInput = input;
     setInput('');
     setIsLoading(true);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
+      // Fix: Always use the process.env.API_KEY string directly for initialization as per guidelines.
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       
       const systemInstruction = `You are a knowledgeable, respectful, and helpful Islamic Assistant named "Athar". Your goal is to help users with questions about Prayer times, Quran, Hadith, and general Islamic knowledge. Keep answers concise. Reply in the user's language (${settings.language}).`;
 
+      // Fix: Use generateContentStream and handle the response property correctly.
       const resultStream = await ai.models.generateContentStream({
         model: 'gemini-3-flash-preview',
-        contents: [{ parts: [{ text: userMsg.text }] }],
+        contents: [{ parts: [{ text: currentInput }] }],
         config: { systemInstruction },
       });
       
@@ -59,7 +62,7 @@ const AIChat: React.FC = () => {
       }
     } catch (error) {
       console.error("AI Error:", error);
-      setMessages(prev => [...prev, { id: Date.now(), role: 'model', text: "حدث خطأ في الاتصال بالذكاء الاصطناعي. يرجى التحقق من اتصال الإنترنت ومفتاح API." }]);
+      setMessages(prev => [...prev, { id: Date.now(), role: 'model', text: "حدث خطأ في الاتصال بالذكاء الاصطناعي. يرجى التحقق من اتصال الإنترنت أو مفتاح API." }]);
     } finally {
       setIsLoading(false);
     }
@@ -73,24 +76,49 @@ const AIChat: React.FC = () => {
   };
 
   return (
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="flex flex-col h-[calc(100vh-200px)] bg-card rounded-2xl border border-zinc-800 overflow-hidden">
+    <motion.div 
+       initial={{ opacity: 0, y: 20 }}
+       animate={{ opacity: 1, y: 0 }}
+       exit={{ opacity: 0, y: -20 }}
+       className="flex flex-col h-[calc(100vh-200px)] bg-card rounded-2xl border border-zinc-800 overflow-hidden"
+    >
        <div className="p-4 border-b border-zinc-800 bg-zinc-900/50 flex items-center gap-3">
-          <div className="bg-neon/20 p-2 rounded-full"><Sparkles className="w-5 h-5 text-neon" /></div>
+          <div className="bg-neon/20 p-2 rounded-full">
+             <Sparkles className="w-5 h-5 text-neon" />
+          </div>
           <div>
              <h3 className="font-bold text-white">{t('common.aiAssistant')}</h3>
-             <p className="text-[10px] text-zinc-500 flex items-center gap-1">Powered by Gemini <span className="w-1.5 h-1.5 rounded-full bg-neon animate-pulse"></span></p>
+             <p className="text-[10px] text-zinc-500 flex items-center gap-1">
+               Powered by Gemini <span className="w-1.5 h-1.5 rounded-full bg-neon animate-pulse"></span>
+             </p>
           </div>
        </div>
+
        <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {messages.map((msg) => (
-             <div key={msg.id} className={`flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${msg.role === 'user' ? 'bg-blue-600' : 'bg-neon/20'}`}>{msg.role === 'user' ? <User className="w-4 h-4 text-white" /> : <Bot className="w-4 h-4 text-neon" />}</div>
-                <div className={`max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${msg.role === 'user' ? 'bg-blue-600/20 border border-blue-600/30 text-blue-100 rounded-tr-none' : 'bg-zinc-800 border border-zinc-700 text-zinc-200 rounded-tl-none'}`}>{msg.text}</div>
+             <div 
+               key={msg.id} 
+               className={`flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}
+             >
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${msg.role === 'user' ? 'bg-blue-600' : 'bg-neon/20'}`}>
+                   {msg.role === 'user' ? <User className="w-4 h-4 text-white" /> : <Bot className="w-4 h-4 text-neon" />}
+                </div>
+                
+                <div className={`max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
+                   msg.role === 'user' 
+                     ? 'bg-blue-600/20 border border-blue-600/30 text-blue-100 rounded-tr-none' 
+                     : 'bg-zinc-800 border border-zinc-700 text-zinc-200 rounded-tl-none'
+                }`}>
+                   {msg.text}
+                </div>
              </div>
           ))}
+          
           {isLoading && (
              <div className="flex gap-3">
-                <div className="w-8 h-8 rounded-full bg-neon/20 flex items-center justify-center shrink-0"><Bot className="w-4 h-4 text-neon" /></div>
+                <div className="w-8 h-8 rounded-full bg-neon/20 flex items-center justify-center shrink-0">
+                   <Bot className="w-4 h-4 text-neon" />
+                </div>
                 <div className="bg-zinc-800 border border-zinc-700 p-4 rounded-2xl rounded-tl-none">
                    <div className="flex gap-1">
                       <span className="w-2 h-2 bg-zinc-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
@@ -102,11 +130,26 @@ const AIChat: React.FC = () => {
           )}
           <div ref={messagesEndRef} />
        </div>
+
        <div className="p-4 bg-zinc-900 border-t border-zinc-800 flex gap-2">
-          <input type="text" value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={handleKeyDown} placeholder={t('common.askAiPlaceholder')} className="flex-1 bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon transition-colors text-sm"/>
-          <button onClick={handleSend} disabled={isLoading || !input.trim()} className="bg-neon text-black p-3 rounded-xl hover:bg-[#42e03c] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"><Send className="w-5 h-5" /></button>
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder={t('common.askAiPlaceholder')}
+            className="flex-1 bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon transition-colors text-sm"
+          />
+          <button 
+             onClick={handleSend}
+             disabled={isLoading || !input.trim()}
+             className="bg-neon text-black p-3 rounded-xl hover:bg-[#42e03c] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+             <Send className="w-5 h-5" />
+          </button>
        </div>
     </motion.div>
   );
 };
+
 export default AIChat;

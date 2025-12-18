@@ -1,28 +1,28 @@
 import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { Settings, RefreshCw, Home, BookOpen, Navigation as NavIcon, Trophy, Map as MapIcon, Loader2, WifiOff, Download, X, MessageSquare, Feather } from 'lucide-react';
-import { fetchPrayerTimes, getCityName } from '@/services/api';
-import { formatDuration, getNextPrayer, calculateQiblaDirection } from '@/utils/timeUtils';
-import { ApiResponse, PrayerData, Coordinates, PrayerName } from '@/types';
-import PrayerCard from '@/components/PrayerCard';
-import TimeCard from '@/components/TimeCard';
-import Compass from '@/components/Compass';
-import { SettingsProvider, useSettings } from '@/contexts/SettingsContext';
-import SettingsModal from '@/components/SettingsModal';
-import LiveBackground from '@/components/LiveBackground';
-import MasjidMode from '@/components/MasjidMode';
-import { Logo } from '@/components/Logo';
+import { fetchPrayerTimes, getCityName } from './services/api';
+import { formatDuration, getNextPrayer, calculateQiblaDirection } from './utils/timeUtils';
+import { ApiResponse, PrayerData, Coordinates, PrayerName } from './types';
+import PrayerCard from './components/PrayerCard';
+import TimeCard from './components/TimeCard';
+import Compass from './components/Compass';
+import { SettingsProvider, useSettings } from './contexts/SettingsContext';
+import SettingsModal from './components/SettingsModal';
+import LiveBackground from './components/LiveBackground';
+import MasjidMode from './components/MasjidMode';
+import { Logo } from './components/Logo';
 import { motion, AnimatePresence } from 'framer-motion';
-import { usePWA } from '@/hooks/usePWA';
+import { usePWA } from './hooks/usePWA';
 
 // --- Lazy Load Heavy Components ---
-const ChallengesModal = React.lazy(() => import('@/components/ChallengesModal'));
-const AthkarWidget = React.lazy(() => import('@/components/AthkarWidget'));
-const HijriCalendar = React.lazy(() => import('@/components/HijriCalendar'));
-const QuranView = React.lazy(() => import('@/components/QuranView'));
-const MosquesMap = React.lazy(() => import('@/components/MosquesMap'));
-const ARQibla = React.lazy(() => import('@/components/ARQibla'));
-const AIChat = React.lazy(() => import('@/components/AIChat'));
-const QuranForWomen = React.lazy(() => import('@/components/QuranForWomen'));
+const ChallengesModal = React.lazy(() => import('./components/ChallengesModal'));
+const AthkarWidget = React.lazy(() => import('./components/AthkarWidget'));
+const HijriCalendar = React.lazy(() => import('./components/HijriCalendar'));
+const QuranView = React.lazy(() => import('./components/QuranView'));
+const MosquesMap = React.lazy(() => import('./components/MosquesMap'));
+const ARQibla = React.lazy(() => import('./components/ARQibla'));
+const AIChat = React.lazy(() => import('./components/AIChat'));
+const QuranForWomen = React.lazy(() => import('./components/QuranForWomen'));
 
 // Loading Fallback Component
 const TabLoader = () => (
@@ -78,7 +78,9 @@ const MawaqitApp: React.FC = () => {
       return result ? { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) } : null;
     };
     const rgb = hexToRgb(color);
-    if (rgb) root.style.setProperty('--neon-rgb', `${rgb.r}, ${rgb.g}, ${rgb.b}`);
+    if (rgb) {
+      root.style.setProperty('--neon-rgb', `${rgb.r}, ${rgb.g}, ${rgb.b}`);
+    }
   }, [nextPrayer, settings.themeMode, settings.neonColor]);
 
   const loadPrayerTimes = async (coordinates: Coordinates, date: Date) => {
@@ -133,7 +135,7 @@ const MawaqitApp: React.FC = () => {
     window.addEventListener('online', () => setIsOffline(false));
     window.addEventListener('offline', () => setIsOffline(true));
     setIsOffline(!navigator.onLine);
-  }, [settings.locationMode, settings.manualLocation, settings.language]);
+  }, [settings.locationMode, settings.manualLocation, settings.language, t]);
 
   useEffect(() => {
     if (coords) {
