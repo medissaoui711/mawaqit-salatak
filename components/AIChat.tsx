@@ -1,8 +1,6 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Bot, User, Sparkles, AlertCircle } from 'lucide-react';
 import { useSettings } from '../contexts/SettingsContext';
-// FIX: Correctly import GoogleGenAI
 import { GoogleGenAI } from "@google/genai";
 import { motion } from 'framer-motion';
 
@@ -30,43 +28,38 @@ const AIChat: React.FC = () => {
   }, [messages]);
 
   const handleSend = async () => {
-    if (!input.trim()) return;
+    if (!input.trim() || isLoading) return;
 
     const userMsg: Message = { id: Date.now(), role: 'user', text: input };
     setMessages(prev => [...prev, userMsg]);
+    const currentInput = input;
     setInput('');
     setIsLoading(true);
 
     try {
-      // FIX: Use process.env.API_KEY as per guidelines
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       
-      const systemInstruction = `
-        You are a knowledgeable, respectful, and helpful Islamic Assistant.
-        Your goal is to help users with questions about Prayer times, Quran, Hadith, and general Islamic knowledge.
-        Keep answers concise.
-      `;
+      const systemInstruction = `You are a knowledgeable, respectful, and helpful Islamic Assistant named "Athar". Your goal is to help users with questions about Prayer times, Quran, Hadith, and general Islamic knowledge. Keep answers concise. Reply in the user's language (${settings.language}).`;
 
-      const chat = ai.chats.create({
-        model: 'gemini-2.5-flash',
+      const response = await ai.models.generateContent({
+        model: 'gemini-3-flash-preview',
+        contents: [{ parts: [{ text: currentInput }] }],
         config: {
           systemInstruction: systemInstruction,
         }
       });
 
-      // FIX: Used sendMessage and extracted the text response correctly.
-      const result = await chat.sendMessage({ message: userMsg.text });
-      const responseText = result.text;
+      const responseText = response.text;
       
       if (responseText) {
-        setMessages(prev => [...prev, { id: Date.now()+1, role: 'model', text: responseText }]);
+        setMessages(prev => [...prev, { id: Date.now() + 1, role: 'model', text: responseText }]);
       } else {
-         throw new Error("No response text");
+         throw new Error("لا يوجد رد من الذكاء الاصطناعي");
       }
 
     } catch (error) {
       console.error("AI Error:", error);
-      setMessages(prev => [...prev, { id: Date.now(), role: 'model', text: "Error connecting to AI. Please check your internet connection." }]);
+      setMessages(prev => [...prev, { id: Date.now(), role: 'model', text: "حدث خطأ في الاتصال بالذكاء الاصطناعي. يرجى التحقق من اتصال الإنترنت أو مفتاح API." }]);
     } finally {
       setIsLoading(false);
     }
@@ -84,9 +77,8 @@ const AIChat: React.FC = () => {
        initial={{ opacity: 0, y: 20 }}
        animate={{ opacity: 1, y: 0 }}
        exit={{ opacity: 0, y: -20 }}
-       className="flex flex-col h-[calc(100vh-140px)] bg-card rounded-2xl border border-zinc-800 overflow-hidden"
+       className="flex flex-col h-[calc(100vh-200px)] bg-card rounded-2xl border border-zinc-800 overflow-hidden"
     >
-       {/* Header */}
        <div className="p-4 border-b border-zinc-800 bg-zinc-900/50 flex items-center gap-3">
           <div className="bg-neon/20 p-2 rounded-full">
              <Sparkles className="w-5 h-5 text-neon" />
@@ -99,7 +91,6 @@ const AIChat: React.FC = () => {
           </div>
        </div>
 
-       {/* Messages */}
        <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {messages.map((msg) => (
              <div 
@@ -137,7 +128,6 @@ const AIChat: React.FC = () => {
           <div ref={messagesEndRef} />
        </div>
 
-       {/* Input */}
        <div className="p-4 bg-zinc-900 border-t border-zinc-800 flex gap-2">
           <input
             type="text"
