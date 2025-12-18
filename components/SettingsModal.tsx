@@ -16,6 +16,8 @@ type Tab = 'general' | 'calculation' | 'location' | 'audio';
 const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, currentCoords, onUpdateLocation }) => {
   const { settings, updateSettings, t } = useSettings();
   const [activeTab, setActiveTab] = useState<Tab>('general');
+  
+  // Local state for unsaved changes
   const [localSettings, setLocalSettings] = useState<AppSettings>(settings);
   const [tempLocation, setTempLocation] = useState<{lat: number, lng: number, city: string} | null>(null);
 

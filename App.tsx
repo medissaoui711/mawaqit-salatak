@@ -14,7 +14,7 @@ import { Logo } from './components/Logo';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePWA } from './hooks/usePWA';
 
-// --- Lazy Load Components ---
+// --- Lazy Load Components with relative paths ---
 const ChallengesModal = React.lazy(() => import('./components/ChallengesModal'));
 const AthkarWidget = React.lazy(() => import('./components/AthkarWidget'));
 const QuranView = React.lazy(() => import('./components/QuranView'));
@@ -61,11 +61,11 @@ const MawaqitApp: React.FC = () => {
     };
   }, []);
 
-  // Theme & Neon Logic
+  // Theme Logic (Dark Mode & Neon Colors)
   useEffect(() => {
     const root = document.documentElement;
     
-    // Handle UI Theme
+    // 1. Dark Mode handling
     if (settings.theme === 'dark') {
       root.classList.add('dark');
     } else if (settings.theme === 'light') {
@@ -75,7 +75,7 @@ const MawaqitApp: React.FC = () => {
       root.classList.toggle('dark', prefersDark);
     }
 
-    // Dynamic Neon Color
+    // 2. Neon Color dynamic update
     let color = settings.neonColor || '#53ff4c'; 
     if (settings.themeMode !== 'manual') {
        if (nextPrayer === 'Sunrise') color = '#ff9d00'; 
@@ -102,7 +102,7 @@ const MawaqitApp: React.FC = () => {
         setData(res.data);
         setError(null);
       } else {
-        setError("خطأ في جلب البيانات");
+        setError("خطأ في الخادم");
       }
     } catch (e) {
       setError(t('common.offline'));
@@ -129,7 +129,7 @@ const MawaqitApp: React.FC = () => {
             await loadPrayerTimes(c);
           },
           async () => {
-            const fallback = { latitude: 21.4225, longitude: 39.8262 };
+            const fallback = { latitude: 21.4225, longitude: 39.8262 }; // Makkah
             setCoords(fallback);
             setCity(t('common.location'));
             await loadPrayerTimes(fallback);
@@ -154,7 +154,7 @@ const MawaqitApp: React.FC = () => {
   }, [data]);
 
   if (loading && !data) return (
-    <div className="min-h-screen bg-dark flex flex-col items-center justify-center text-neon">
+    <div className="min-h-screen bg-white dark:bg-dark flex flex-col items-center justify-center text-neon transition-colors">
       <RefreshCw className="w-10 h-10 animate-spin mb-4" />
       <p className="animate-pulse">{t('common.loading')}</p>
     </div>
